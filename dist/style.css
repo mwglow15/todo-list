@@ -1,0 +1,63 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  height: 100vh;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Header Styling */
+header {
+  display: flex;
+  flex-direction: row;
+  height: 125px;
+  padding: 25px;
+  align-items: center;
+  gap: 25px;
+  background-color: gray;
+}
+
+.title {
+  font-size: 3em;
+}
+
+/* Bottom Section Styling */
+#content {
+  display: flex;
+  align-items: stretch;
+  height: 100vh;
+}
+
+/* Sidebar Styling */
+#nav-bar {
+  flex-grow: 1;
+  padding: 30px 15px;
+  font-size: 1.25em;
+  background-color: lightgray;
+}
+
+.project {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+button#new-project {
+  font-size: 1.25rem;
+  padding: 3px;
+  border-radius: 3px;
+  margin-top: 15px;
+}
+
+/* Main Content */
+#tasks {
+  flex-grow: 5;
+  padding: 15px 25px;
+}
