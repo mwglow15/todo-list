@@ -1,4 +1,4 @@
-import project from './project.js'
+
 import task from './task.js'
 
 export default class todoList {
@@ -10,7 +10,7 @@ export default class todoList {
     this.projects.push(project)
   }
 
-  getList() {
+  getProjects() {
     return this.projects
   }
 }

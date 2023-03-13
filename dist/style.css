@@ -58,6 +58,6 @@ button#new-project {
 
 /* Main Content */
 #tasks {
-  flex-grow: 5;
+  flex-grow: 8;
   padding: 15px 25px;
 }
