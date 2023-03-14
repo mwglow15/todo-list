@@ -57,7 +57,8 @@ button#new-project {
 }
 
 /* Main Content */
-#tasks {
+
+#project-container {
   flex-grow: 8;
   padding: 15px 25px;
 }

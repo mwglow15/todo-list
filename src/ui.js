@@ -22,22 +22,29 @@ export default class UI {
     const customProjects = document.querySelectorAll('.project.custom-project')
     const addProjectButton = document.querySelector('#new-project')
     
-    inbox.addEventListener('click', this.addProjectButtons)
-    today.addEventListener('click', this.addProjectButtons)
-    tomorrow.addEventListener('click', this.addProjectButtons)
+    inbox.addEventListener('click', this.showProject)
+    today.addEventListener('click', this.showProject)
+    tomorrow.addEventListener('click', this.showProject)
     customProjects.forEach(project => {
-      project.addEventListener('click', this.addProjectButtons)
+      project.addEventListener('click', this.showProject)
     })
 
     addProjectButton.addEventListener('click', this.newProject())
   }
 
   static newProject() {
-
+    this.openNewProjectForm()
   }
 
   static showProject(e) {
-    project = this.children[1].textContent
+    console.log(e.target.parentNode.children[1].textContent)
+    const project = e.target.parentNode.children[1].textContent
+    
+    const tasksContainer = document.querySelector('#project-container')
 
+    tasksContainer.innerHTML = `
+    <div id="project-title">${project}</div>
+    <div id="tasks-container"></div>
+    `
   }
 }
