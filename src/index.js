@@ -1,5 +1,7 @@
 import UI from './ui.js'
+import TodoList from './todoList.js'
 
-console.log('test')
+const todoList = new TodoList()
+const ui = new UI(todoList)
 
-document.addEventListener('DOMContentLoaded', UI.init)
+document.addEventListener('DOMContentLoaded', ui.loadAssets())

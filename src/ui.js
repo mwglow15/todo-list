@@ -1,50 +1,101 @@
 import Project from './project.js'
 import Task from './task.js'
 import TodoList from './todoList.js'
+import Storage from './storage.js'
 
 export default class UI {
+  constructor(todoList) {
+    this.todoList = todoList
+  }
 
-  static init() {
-    const todoList = new TodoList()
+  loadAssets() {
 
-    todoList.addProject(new Project('Inbox'))
-    todoList.addProject(new Project('Today'))
-    todoList.addProject(new Project('Tomorrow'))
+    this.loadProjects()
+    this.initProjectButtons()
+    this.showProject('Inbox')
+  }
 
-    UI.initProjectButtons()
+  loadProjects() {
+
   }
 
   // Project Event Listeners
-  static initProjectButtons() {
+  initProjectButtons() {
+    console.log('thisthisthis')
     const inbox = document.querySelector('.project.inbox')
     const today = document.querySelector('.project.today')
     const tomorrow = document.querySelector('.project.tomorrow')
     const customProjects = document.querySelectorAll('.project.custom-project')
     const addProjectButton = document.querySelector('#new-project')
     
-    inbox.addEventListener('click', this.showProject)
-    today.addEventListener('click', this.showProject)
-    tomorrow.addEventListener('click', this.showProject)
+    today.addEventListener('click', this.handleProjectButtons.bind(this))
+    inbox.addEventListener('click', this.handleProjectButtons.bind(this))
+    tomorrow.addEventListener('click', this.handleProjectButtons.bind(this))
     customProjects.forEach(project => {
-      project.addEventListener('click', this.showProject)
+      project.addEventListener('click', this.showProject.bind(this))
     })
 
-    addProjectButton.addEventListener('click', this.newProject())
+    addProjectButton.addEventListener('click', this.newProject.bind(this))
   }
 
-  static newProject() {
+  // Functions to switch active project
+
+  newProject() {
+    console.log(this)
     this.openNewProjectForm()
   }
 
-  static showProject(e) {
+  openNewProjectForm() {
+
+  }
+
+  handleProjectButtons(e) {
     console.log(e.target.parentNode.children[1].textContent)
-    const project = e.target.parentNode.children[1].textContent
+    const projectName = e.target.parentNode.children[1].textContent
+
+    this.showProject(projectName)
+  }
     
+  showProject(projectName) {
     const tasksContainer = document.querySelector('#project-container')
+    const project = this.todoList.getProject(projectName)
 
     tasksContainer.innerHTML = `
-    <div id="project-title">${project}</div>
+    <div class="tasks-header">
+      <div id="project-title">${projectName}</div>
+      <button type="button" id="new-task">
+        <i class="fa-sharp fa-solid fa-plus"></i>
+        New Task
+      </button>
+    </div>
     <div id="tasks-container"></div>
     `
+
+    if (projectName === 'Today') {
+      console.log(this)
+      this.showTodaysTasks()
+    } else if (projectName === 'Tomorrow') {
+      this.showTomorrowsTasks()
+    } else {
+      this.renderTaskCards(project)
+    }
+
+    this.initTaskButtons()
+  }
+
+  initTaskButtons() {
+
+  }
+
+  showTodaysTasks() {
+    
+  }
+
+  showTomorrowsTasks() {
+
+  }
+
+  renderTaskCards(project) {
+
   }
 }
