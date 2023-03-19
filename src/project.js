@@ -1,3 +1,5 @@
+import Task from './task.js'
+
 export default class project {
   constructor(name) {
     this.name = name
@@ -12,8 +14,8 @@ export default class project {
     return this.name
   }
 
-  addTask(task) {
-    this.tasks.push(task)
+  addTask(taskName,dueDate) {
+    this.tasks.push(new Task(taskName, dueDate))
   }
 
   getTasks() {

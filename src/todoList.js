@@ -10,6 +10,8 @@ export default class todoList {
     this.projects.push(new Project('Today'))
     this.projects.push(new Project('Tomorrow'))
 
+    this.projects[0].addTask("test")
+    this.projects[0].addTask("test2")
   }
 
   addProject(project) {

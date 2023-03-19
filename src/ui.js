@@ -21,7 +21,6 @@ export default class UI {
 
   // Project Event Listeners
   initProjectButtons() {
-    console.log('thisthisthis')
     const inbox = document.querySelector('.project.inbox')
     const today = document.querySelector('.project.today')
     const tomorrow = document.querySelector('.project.tomorrow')
@@ -38,7 +37,6 @@ export default class UI {
     addProjectButton.addEventListener('click', this.newProject.bind(this))
   }
 
-  // Functions to switch active project
 
   newProject() {
     console.log(this)
@@ -57,13 +55,13 @@ export default class UI {
   }
     
   showProject(projectName) {
-    const tasksContainer = document.querySelector('#project-container')
+    const projectContainer = document.querySelector('#project-container')
     const project = this.todoList.getProject(projectName)
-
-    tasksContainer.innerHTML = `
+    console.log(project)
+    projectContainer.innerHTML = `
     <div class="tasks-header">
-      <div id="project-title">${projectName}</div>
-      <button type="button" id="new-task">
+      <div class="project-title">${projectName}</div>
+      <button type="button" class="new-task">
         <i class="fa-sharp fa-solid fa-plus"></i>
         New Task
       </button>
@@ -72,18 +70,24 @@ export default class UI {
     `
 
     if (projectName === 'Today') {
-      console.log(this)
       this.showTodaysTasks()
     } else if (projectName === 'Tomorrow') {
       this.showTomorrowsTasks()
     } else {
-      this.renderTaskCards(project)
+      this.loadTasks(project)
     }
 
-    this.initTaskButtons()
+    this.initTaskButtons(projectName)
   }
 
-  initTaskButtons() {
+  initTaskButtons(project) {
+    const newTask = document.querySelector('.new-task')
+    console.log('initTaskButtons')
+    console.log(this)
+    newTask.addEventListener('click', this.newTaskForm())
+  }
+
+  newTaskForm() {
 
   }
 
@@ -95,7 +99,31 @@ export default class UI {
 
   }
 
-  renderTaskCards(project) {
+  loadTasks(project) {
+    console.log("task card")
+    console.log(project)
+    const projectTasks = project.getTasks()
 
+    const tasksContainer = document.querySelector('#tasks-container')
+
+    tasksContainer.innerHTML = ''
+
+    projectTasks.forEach((task) => {
+      this.renderTaskCard(task, tasksContainer)
+    })
+  }
+
+  renderTaskCard(task, tasksContainer) {
+    console.log(task)
+    
+
+    tasksContainer.innerHTML += `
+    <div class="task-card">
+      <p class="task-name">${task.getName()}</p>
+      <div class="task-date-container">
+        <p>Due Date</p>
+        <p>${task.getDueDate()}</p>
+      </div>
+    </div>`
   }
 }
