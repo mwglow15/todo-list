@@ -65,18 +65,20 @@ button#new-project {
 
 .project-title {
   font-size: 2rem;
+  align-content: center;
 }
 
 .new-task {
   font-size: 1.25rem;
   padding: 3px;
   border-radius: 3px;
-  margin-top: 15px;
+  align-content: center;
 }
 
 .tasks-header {
   display: flex;
   align-items: center;
+  gap: 2rem;
 }
 
 #tasks-container {

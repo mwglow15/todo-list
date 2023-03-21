@@ -14,7 +14,7 @@ export default class project {
     return this.name
   }
 
-  addTask(taskName,dueDate) {
+  addTask(taskName, dueDate) {
     this.tasks.push(new Task(taskName, dueDate))
   }
 

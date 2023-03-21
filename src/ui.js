@@ -6,13 +6,14 @@ import Storage from './storage.js'
 export default class UI {
   constructor(todoList) {
     this.todoList = todoList
+    this.currentProjectName = 'Inbox'
   }
 
   loadAssets() {
 
     this.loadProjects()
     this.initProjectButtons()
-    this.showProject('Inbox')
+    this.showProject(this.currentProjectName)
   }
 
   loadProjects() {
@@ -39,7 +40,6 @@ export default class UI {
 
 
   newProject() {
-    console.log(this)
     this.openNewProjectForm()
   }
 
@@ -48,7 +48,6 @@ export default class UI {
   }
 
   handleProjectButtons(e) {
-    console.log(e.target.parentNode.children[1].textContent)
     const projectName = e.target.parentNode.children[1].textContent
 
     this.showProject(projectName)
@@ -84,11 +83,51 @@ export default class UI {
     const newTask = document.querySelector('.new-task')
     console.log('initTaskButtons')
     console.log(this)
-    newTask.addEventListener('click', this.newTaskForm())
+    newTask.addEventListener('click', this.openNewTaskForm.bind(this))
   }
 
-  newTaskForm() {
+  openNewTaskForm() {
+    const tasksContainer = document.querySelector("#tasks-container")
 
+    if (tasksContainer.firstChild.tagName !== "FORM") {
+      const newTaskForm = document.createElement('form')
+      newTaskForm.innerHTML = `
+      <label for="task-name">Task Name</label>
+      <input type="text" id="tname" name="task-name">
+      <div class="form-buttons-div">
+        <input class="form-buttons submit" type="button" value="Submit">
+        <input type="button" class="form-buttons close" id="close-task-form-button" value="Close">
+      </div>
+      `
+
+      tasksContainer.prepend(newTaskForm)
+
+      const submitButton = document.querySelector('.submit')
+      const closeButton = document.querySelector('#close-task-form-button')
+      this.initFormButtons(submitButton, closeButton)
+    }
+  }
+
+  initFormButtons(submitButton, closeButton) {
+    submitButton.addEventListener('click', this.submitTaskForm.bind(this))
+
+    closeButton.addEventListener('click', this.closeTaskForm)
+  }
+
+  submitTaskForm() {
+    const taskName = document.getElementById('tname').value
+    const currentProject = this.todoList.getProject(this.currentProjectName)
+    
+    currentProject.addTask(taskName)
+
+    this.loadTasks(currentProject)
+  } 
+
+  closeTaskForm() {
+    console.log('test')
+    const tasksContainer = document.querySelector("#tasks-container")
+    console.log(tasksContainer.firstElementChild)
+    tasksContainer.firstElementChild.remove()
   }
 
   showTodaysTasks() {
@@ -100,7 +139,6 @@ export default class UI {
   }
 
   loadTasks(project) {
-    console.log("task card")
     console.log(project)
     const projectTasks = project.getTasks()
 
@@ -114,9 +152,7 @@ export default class UI {
   }
 
   renderTaskCard(task, tasksContainer) {
-    console.log(task)
     
-
     tasksContainer.innerHTML += `
     <div class="task-card">
       <p class="task-name">${task.getName()}</p>
