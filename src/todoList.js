@@ -14,8 +14,8 @@ export default class todoList {
     this.projects[0].addTask("test2")
   }
 
-  addProject(project) {
-    this.projects.push(project)
+  addProject(projectName) {
+    this.projects.push(new Project(projectName))
   }
 
   getProjects() {
@@ -23,7 +23,6 @@ export default class todoList {
   }
 
   getProject(projectName) {
-    console.log('test test')
     let foundProject = this.projects.find((project) => project.getName() === projectName)
     
     return foundProject
