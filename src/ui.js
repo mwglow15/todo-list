@@ -34,8 +34,7 @@ export default class UI {
         <div class="project custom-project ${project.getName()}">
           <i class="fa-sharp fa-solid fa-list-ul"></i>
           <p>${project.getName()}</p>
-        </div>
-        `
+        </div>`
       }
     })
 
@@ -64,7 +63,6 @@ export default class UI {
     })
   }
 
-
   newProject() {
     this.openNewProjectForm().bind(this)
   }
@@ -82,8 +80,7 @@ export default class UI {
       <div class="form-buttons-div">
         <input class="form-buttons submit" type="button" value="Submit">
         <input type="button" class="form-buttons close" value="Close">
-      </div>
-      `
+      </div>`
 
       newProjectsContainer.prepend(newProjectForm)
 
@@ -101,15 +98,33 @@ export default class UI {
   submitProjectForm() {
     const projInput = document.getElementById('projName').value
 
-    this.todoList.addProject(projInput)
-    this.loadProjects()
-    this.showProject(projInput)
+    const goodInput = this.checkProjInput(projInput)
+
+    if(goodInput) {
+      this.todoList.addProject(projInput)
+      this.loadProjects()
+      this.showProject(projInput)
+    }
   }
 
   closeProjectForm() {
     const projForm = document.querySelector('.new-project-form')
 
     projForm.remove()
+  }
+
+  checkProjInput(input) {
+    if (input === '') {
+      console.log('Enter a project name')
+      return false
+    }
+
+    if (this.todoList.getProjects().includes(input)) {
+      console.log('Enter a unique project name')
+      return false
+    }
+
+    return true
   }
 
   handleProjectButtons(e) {
@@ -155,7 +170,7 @@ export default class UI {
   openNewTaskForm() {
     const tasksContainer = document.querySelector("#tasks-container")
 
-    if (tasksContainer.firstChild.tagName !== "FORM") {
+    if (!tasksContainer.firstChild || tasksContainer.firstChild.tagName !== "FORM") {
       const newTaskForm = document.createElement('form')
       newTaskForm.classList.add('new-task-form')
       newTaskForm.innerHTML = `
@@ -164,8 +179,7 @@ export default class UI {
       <div class="form-buttons-div">
         <input class="form-buttons submit" type="button" value="Submit">
         <input type="button" class="form-buttons close" id="close-task-form-button" value="Close">
-      </div>
-      `
+      </div>`
 
       tasksContainer.prepend(newTaskForm)
 
