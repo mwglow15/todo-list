@@ -27,4 +27,13 @@ export default class todoList {
     
     return foundProject
   }
+
+  getProjectNames() {
+    let projNames = []
+    this.projects.forEach(proj => {
+      projNames.push(proj.getName())
+    })
+
+    return projNames
+  }
 }

@@ -114,12 +114,14 @@ export default class UI {
   }
 
   checkProjInput(input) {
+    console.log(input)
+    console.log(this.todoList.getProjectNames())
     if (input === '') {
       console.log('Enter a project name')
       return false
     }
 
-    if (this.todoList.getProjects().includes(input)) {
+    if (this.todoList.getProjectNames().includes(input)) {
       console.log('Enter a unique project name')
       return false
     }
