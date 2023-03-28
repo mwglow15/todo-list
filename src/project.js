@@ -21,4 +21,13 @@ export default class project {
   getTasks() {
     return this.tasks
   }
+
+  getTaskNames() {
+    let taskNames = []
+    this.tasks.forEach(task => {
+      taskNames.push(task.getName())
+    })
+
+    return taskNames
+  }
 }

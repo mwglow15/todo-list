@@ -98,9 +98,9 @@ export default class UI {
   submitProjectForm() {
     const projInput = document.getElementById('projName').value
 
-    const goodInput = this.checkProjInput(projInput)
+    const isGoodInput = this.checkProjInput(projInput)
 
-    if(goodInput) {
+    if(isGoodInput) {
       this.todoList.addProject(projInput)
       this.loadProjects()
       this.showProject(projInput)
@@ -114,8 +114,6 @@ export default class UI {
   }
 
   checkProjInput(input) {
-    console.log(input)
-    console.log(this.todoList.getProjectNames())
     if (input === '') {
       console.log('Enter a project name')
       return false
@@ -198,12 +196,29 @@ export default class UI {
 
   submitTaskForm() {
     const taskName = document.getElementById('taskName').value
-    const currentProject = this.todoList.getProject(this.currentProjectName)
-    
-    currentProject.addTask(taskName)
 
-    this.loadTasks(currentProject)
+    const isGoodName = this.checkTaskInput(taskName)
+
+    if (isGoodName) {
+      const currentProject = this.todoList.getProject(this.currentProjectName)
+      currentProject.addTask(taskName)
+      this.loadTasks(currentProject)
+    }
   } 
+
+  checkTaskInput(input) {
+    if (input === '') {
+      console.log('Enter a Task name')
+      return false
+    }
+
+    if (this.todoList.getProject(this.currentProjectName).getTaskNames().includes(input)) {
+      console.log('Enter a unique task name')
+      return false
+    }
+
+    return true
+  }
 
   closeTaskForm() {
     const tasksContainer = document.querySelector("#tasks-container")
