@@ -76,26 +76,25 @@ export default class UI {
       newProjectForm.classList.add('new-project-form')
       newProjectForm.innerHTML = `
       <label for="task-name">Project Name</label>
-      <input type="text" id="projName" name="project-name">
+      <input type="text" id="projName" name="project-name" required>
       <div class="form-buttons-div">
-        <input class="form-buttons submit" type="button" value="Submit">
+        <input class="form-buttons submit" type="submit" value="Submit">
         <input type="button" class="form-buttons close" value="Close">
       </div>`
 
-      newProjectsContainer.prepend(newProjectForm)
+      newProjectsContainer.append(newProjectForm)
 
+      newProjectForm.addEventListener('submit', this.submitProjectForm.bind(this))
+      }
+      
+      
       const submitButton = document.querySelector('.submit')
       const closeButton = document.querySelector('.close')
-      this.initProjectFormButtons(submitButton, closeButton)
-    }
+      closeButton.addEventListener('click', this.closeProjectForm)
   }
 
-  initProjectFormButtons(submitButton, closeButton) {
-    submitButton.addEventListener('click', this.submitProjectForm.bind(this))
-    closeButton.addEventListener('click', this.closeProjectForm)
-  }
-
-  submitProjectForm() {
+  submitProjectForm(e) {
+    e.preventDefault()
     const projInput = document.getElementById('projName').value
 
     const isGoodInput = this.checkProjInput(projInput)
@@ -183,18 +182,14 @@ export default class UI {
 
       tasksContainer.prepend(newTaskForm)
 
-      const submitButton = document.querySelector('.submit')
+      newTaskForm.addEventListener('submit',this.submitTaskForm.bind(this))
       const closeButton = document.querySelector('#close-task-form-button')
-      this.initFormButtons(submitButton, closeButton)
+      closeButton.addEventListener('click', this.closeTaskForm)
     }
   }
 
-  initFormButtons(submitButton, closeButton) {
-    submitButton.addEventListener('click', this.submitTaskForm.bind(this))
-    closeButton.addEventListener('click', this.closeTaskForm)
-  }
-
-  submitTaskForm() {
+  submitTaskForm(e) {
+    e.preventDefault()
     const taskName = document.getElementById('taskName').value
 
     const isGoodName = this.checkTaskInput(taskName)
