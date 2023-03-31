@@ -18,6 +18,7 @@ export default class UI {
 
   loadProjects() {
     const projectContainer = document.querySelector('.new-projects-container')
+    const projectTags = document.querySelectorAll('.project')
 
     while (projectContainer.firstChild) {
       projectContainer.firstChild.remove()
@@ -34,8 +35,14 @@ export default class UI {
         <div class="project custom-project ${project.getName()}">
           <i class="fa-sharp fa-solid fa-list-ul"></i>
           <p>${project.getName()}</p>
+          <i class="fa-solid fa-xmark"></i>
         </div>`
       }
+    })
+
+    projectTags.forEach((proj) => {
+      proj.innerHTML += `
+    `
     })
 
     this.initUserProjectButtons()
@@ -43,6 +50,7 @@ export default class UI {
 
   // Project Event Listeners
   initProjectButtons() {
+    const projects = document.querySelectorAll('.project')
     const inbox = document.querySelector('.project.inbox')
     const today = document.querySelector('.project.today')
     const tomorrow = document.querySelector('.project.tomorrow')
@@ -55,12 +63,48 @@ export default class UI {
     addProjectButton.addEventListener('click', this.openNewProjectForm.bind(this))
   }
 
+  showDeleteButton(e) {
+    const deleteButton = e.currentTarget.querySelector('.fa-xmark')
+    deleteButton.style.display = "inline"
+  }
+
+  hideDeleteButton(e) {
+    const deleteButton = e.currentTarget.querySelector('.fa-xmark')
+    deleteButton.style.display = "none"
+  }
+
   initUserProjectButtons() {
     const customProjects = document.querySelectorAll('.project.custom-project')
+    const deleteButtons = document.querySelectorAll('.fa-xmark')
+
+    deleteButtons.forEach(button => {
+      button.removeEventListener('click', this.handleDeleteProjButton)
+      button.addEventListener('click', this.handleDeleteProjButton.bind(this), {once: true})
+    })
 
     customProjects.forEach(project => {
+      project.removeEventListener('click', this.handleProjectButtons.bind(this))
+      project.removeEventListener('mouseover', this.showDeleteButton.bind(this))
+      project.removeEventListener('mouseout', this.hideDeleteButton.bind(this))
+
       project.addEventListener('click', this.handleProjectButtons.bind(this))
+      project.addEventListener('mouseover', this.showDeleteButton.bind(this))
+      project.addEventListener('mouseout', this.hideDeleteButton.bind(this))
     })
+  }
+
+  handleDeleteProjButton(e) {
+    console.log(e)
+    e.stopPropagation()
+    const projectName = e.currentTarget.parentElement.querySelector('p').innerHTML
+    const project = this.todoList.getProject(projectName)
+    console.log('test')
+    this.todoList.deleteProject(project)
+
+    this.loadProjects()
+    if (this.currentProjectName == projectName) {
+      this.showProject('Inbox')
+    }
   }
 
   newProject() {
@@ -127,7 +171,6 @@ export default class UI {
   }
 
   handleProjectButtons(e) {
-    console.log(e.currentTarget)
     const projectName = e.currentTarget.children[1].textContent
 
     this.showProject(projectName)
@@ -230,7 +273,6 @@ export default class UI {
   }
 
   loadTasks(project) {
-    console.log(project)
     const projectTasks = project.getTasks()
 
     const tasksContainer = document.querySelector('#tasks-container')

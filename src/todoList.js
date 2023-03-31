@@ -28,6 +28,11 @@ export default class todoList {
     return foundProject
   }
 
+  deleteProject(project) {
+    const index = this.projects.indexOf(project)
+    this.projects.splice(index,1)
+  }
+
   getProjectNames() {
     let projNames = []
     this.projects.forEach(proj => {
