@@ -11,7 +11,7 @@ export default class todoList {
     this.projects.push(new Project('Tomorrow'))
 
     this.projects[0].addTask("test")
-    this.projects[0].addTask("test2")
+    this.projects[0].addTask("test2",'No Date', true)
   }
 
   addProject(projectName) {

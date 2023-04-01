@@ -14,12 +14,18 @@ export default class project {
     return this.name
   }
 
-  addTask(taskName, dueDate) {
-    this.tasks.push(new Task(taskName, dueDate))
+  addTask(taskName, dueDate, done) {
+    this.tasks.push(new Task(taskName, dueDate, done))
   }
 
   getTasks() {
     return this.tasks
+  }
+
+  getTask(taskName) {
+    let foundTask = this.tasks.find((task) => task.getName() === taskName)
+    
+    return foundTask
   }
 
   getTaskNames() {

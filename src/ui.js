@@ -94,11 +94,10 @@ export default class UI {
   }
 
   handleDeleteProjButton(e) {
-    console.log(e)
     e.stopPropagation()
     const projectName = e.currentTarget.parentElement.querySelector('p').innerHTML
     const project = this.todoList.getProject(projectName)
-    console.log('test')
+
     this.todoList.deleteProject(project)
 
     this.loadProjects()
@@ -200,10 +199,10 @@ export default class UI {
     }
 
     this.currentProjectName = projectName
-    this.initTaskButtons(projectName)
+    this.initNewTaskButton(projectName)
   }
 
-  initTaskButtons(project) {
+  initNewTaskButton() {
     const newTask = document.querySelector('.new-task')
 
     newTask.addEventListener('click', this.openNewTaskForm.bind(this))
@@ -225,7 +224,7 @@ export default class UI {
 
       tasksContainer.prepend(newTaskForm)
 
-      newTaskForm.addEventListener('submit',this.submitTaskForm.bind(this))
+      newTaskForm.addEventListener('click',this.submitTaskForm.bind(this))
       const closeButton = document.querySelector('#close-task-form-button')
       closeButton.addEventListener('click', this.closeTaskForm)
     }
@@ -234,6 +233,7 @@ export default class UI {
   submitTaskForm(e) {
     e.preventDefault()
     const taskName = document.getElementById('taskName').value
+    console.log(taskName)
 
     const isGoodName = this.checkTaskInput(taskName)
 
@@ -241,6 +241,7 @@ export default class UI {
       const currentProject = this.todoList.getProject(this.currentProjectName)
       currentProject.addTask(taskName)
       this.loadTasks(currentProject)
+      this.initTaskButtons(currentProject)
     }
   } 
 
@@ -272,8 +273,8 @@ export default class UI {
 
   }
 
-  loadTasks(project) {
-    const projectTasks = project.getTasks()
+  loadTasks(currentProject) {
+    const projectTasks = currentProject.getTasks()
 
     const tasksContainer = document.querySelector('#tasks-container')
 
@@ -282,12 +283,31 @@ export default class UI {
     projectTasks.forEach((task) => {
       this.renderTaskCard(task, tasksContainer)
     })
+
+    this.initTaskButtons(currentProject)
+  }
+
+  initTaskButtons(currentProject) {
+    const checkboxes = document.querySelectorAll("[type='checkbox']")
+
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener('click', this.setTaskDone.bind(this, currentProject))
+    })
+  }
+
+  setTaskDone(currentProject, e) {
+    const taskName = e.currentTarget.name
+    const taskDone = e.currentTarget.checked
+
+    const clickedTask = currentProject.getTask(taskName)
+
+    clickedTask.setDoneStatus(taskDone)
   }
 
   renderTaskCard(task, tasksContainer) {
-    
     tasksContainer.innerHTML += `
     <div class="task-card">
+      <input type="checkbox" id="taskDone" name="${task.getName()}" ${task.getDoneStatus() ? 'checked' : ""}>
       <p class="task-name">${task.getName()}</p>
       <div class="task-date-container">
         <p>Due Date</p>
