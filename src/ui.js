@@ -2,6 +2,7 @@ import Project from './project.js'
 import Task from './task.js'
 import TodoList from './todoList.js'
 import Storage from './storage.js'
+import task from './task.js'
 
 export default class UI {
   constructor(todoList) {
@@ -16,6 +17,9 @@ export default class UI {
     this.showProject(this.currentProjectName)
   }
 
+  //Side Bar Function //
+
+  //Loads projects in Todo List into nav bar
   loadProjects() {
     const projectContainer = document.querySelector('.new-projects-container')
     const projectTags = document.querySelectorAll('.project')
@@ -174,6 +178,8 @@ export default class UI {
 
     this.showProject(projectName)
   }
+
+  // Project View Functions
     
   showProject(projectName) {
     const projectContainer = document.querySelector('#project-container')
@@ -289,10 +295,40 @@ export default class UI {
 
   initTaskButtons(currentProject) {
     const checkboxes = document.querySelectorAll("[type='checkbox']")
+    const dueDate = document.querySelectorAll(".task-date-container")
+    const newDateForms = document.querySelectorAll(".task-date-input")
 
     checkboxes.forEach(checkbox => {
       checkbox.addEventListener('click', this.setTaskDone.bind(this, currentProject))
     })
+
+    dueDate.forEach(dateButton => {
+      dateButton.addEventListener('click', this.showEditDateForm.bind(this, currentProject))
+    })
+
+    newDateForms.forEach(newDateForm => {
+      newDateForm.addEventListener('change', this.editDueDate.bind(this, currentProject))
+    })
+  }
+
+  showEditDateForm(currentProject, e) {
+    const taskTarget = e.currentTarget
+    const taskDateForm = taskTarget.parentElement.querySelector(".task-date-input")
+
+    taskTarget.style.display = 'none'
+    taskDateForm.style.display = 'flex'
+  }
+
+  editDueDate(currentProject, e) {
+    console.log(e)
+    const taskName = e.target.parentElement.parentElement.querySelector('.task-name').textContent
+    console.log(taskName)
+    const task = currentProject.getTask(taskName)
+    const newDate = e.target.value
+
+    task.setDueDate(newDate)
+
+    this.loadTasks(currentProject)
   }
 
   setTaskDone(currentProject, e) {
@@ -305,13 +341,21 @@ export default class UI {
   }
 
   renderTaskCard(task, tasksContainer) {
+    const taskDate = task.getDueDate()
+
+    const inputValue = taskDate == "No Date" ? "" : taskDate
+
     tasksContainer.innerHTML += `
     <div class="task-card">
       <input type="checkbox" id="taskDone" name="${task.getName()}" ${task.getDoneStatus() ? 'checked' : ""}>
       <p class="task-name">${task.getName()}</p>
       <div class="task-date-container">
         <p>Due Date</p>
-        <p>${task.getDueDate()}</p>
+        <p>${taskDate}</p>
+      </div>
+      <div class="task-date-input">
+        <label for="date-input">Due Date</label>
+        <input type="date" id="date-input" value="${inputValue}">
       </div>
     </div>`
   }
