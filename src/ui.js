@@ -295,15 +295,20 @@ export default class UI {
 
   initTaskButtons(currentProject) {
     const checkboxes = document.querySelectorAll("[type='checkbox']")
-    const dueDate = document.querySelectorAll(".task-date-container")
+    const dueDates = document.querySelectorAll(".task-date-container")
     const newDateForms = document.querySelectorAll(".task-date-input")
+    const taskNames = document.querySelectorAll(".task-name")
 
     checkboxes.forEach(checkbox => {
       checkbox.addEventListener('click', this.setTaskDone.bind(this, currentProject))
     })
 
-    dueDate.forEach(dateButton => {
-      dateButton.addEventListener('click', this.showEditDateForm.bind(this, currentProject))
+    taskNames.forEach(taskName => {
+      taskName.addEventListener('click', showEditTaskNameForm.bind(this))
+    })
+
+    dueDates.forEach(dueDate => {
+      dueDate.addEventListener('click', this.showEditDateForm.bind(this))
     })
 
     newDateForms.forEach(newDateForm => {
@@ -311,7 +316,11 @@ export default class UI {
     })
   }
 
-  showEditDateForm(currentProject, e) {
+  showEditTaskNameForm(e) {
+
+  }
+
+  showEditDateForm(e) {
     const taskTarget = e.currentTarget
     const taskDateForm = taskTarget.parentElement.querySelector(".task-date-input")
 
@@ -342,13 +351,17 @@ export default class UI {
 
   renderTaskCard(task, tasksContainer) {
     const taskDate = task.getDueDate()
+    const taskName = task.getName()
 
     const inputValue = taskDate == "No Date" ? "" : taskDate
 
     tasksContainer.innerHTML += `
     <div class="task-card">
-      <input type="checkbox" id="taskDone" name="${task.getName()}" ${task.getDoneStatus() ? 'checked' : ""}>
-      <p class="task-name">${task.getName()}</p>
+      <input type="checkbox" id="taskDone" name="${taskName}" ${task.getDoneStatus() ? 'checked' : ""}>
+      <div class="task-name-container">
+        <p class="task-name">${taskName}</p>
+        <input type="text" id="name-input" value="${taskName}">
+      </div>
       <div class="task-date-container">
         <p>Due Date</p>
         <p>${taskDate}</p>
